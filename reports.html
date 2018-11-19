@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="static/css/reports.css">
+        <script src="static/js/jquery-3.2.1.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script src="static/js/chart.bundle.js"></script>
+        <script src="static/js/reports.js"></script>
+    </head>
+    <body>
+        <div class="menu">
+            <select class="dropdown inp" id="year">
+                <option disabled selected>Select Year</option>
+                <option selected>2007</option>
+                <option>2008</option>
+                <option>2009</option>
+                <option>2010</option>
+                <option>2011</option>
+                <option>2012</option>
+                <option>2013</option>
+                <option>2014</option>
+                <option>2015</option>
+            </select>
+            <input type="submit" class="select-btn inp" value="Generate Report" onclick="getStats()">
+        </div>
+
+        <div class="stat-content">
+            <div class="stat-item">
+                <p>Total Amount Applied For</p>
+                <h2 id="applied" name="aggregations"></h2>
+            </div>
+            <div class="stat-item">
+                <p>Total Amount Funded</p>
+                <h2 id="funded" name="aggregations"></h2>
+            </div>
+            <div class="stat-item">
+                <p>Total Committed by Investors</p>
+                <h2 id="committed" name="aggregations"></h2>
+            </div>
+        </div>
+
+        <div class="graph-content">
+            <div class="graph-item">
+                <p>Loan By Credit Grade</p>
+                <div id="credit-based" class="graph"></div>
+            </div>
+            <div class="graph-item">
+                <p>Monthly Loan Volume</p>
+                <div id="monthly" class="graph"></div>
+            </div>
+        </div>
+    </body>
+</html>
