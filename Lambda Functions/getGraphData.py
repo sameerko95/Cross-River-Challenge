@@ -62,5 +62,3 @@ def lambda_handler(event, context):
 
     graphData = {"month-volume": monthVolume, "credit-based-avg": creditBasedLoans}
     return graphData
-
-lambda_handler(1,2)
