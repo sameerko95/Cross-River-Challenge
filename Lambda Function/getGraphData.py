@@ -4,9 +4,6 @@ import json
 
 def lambda_handler(event, context):
     year = event["params"]["querystring"]["year"]
-    start_time = time.time()
-
-    # year = event["params"]["querystring"]["year"]
     s3 = boto3.client('s3')
 
     response = s3.select_object_content(
@@ -62,10 +59,6 @@ def lambda_handler(event, context):
     for grade in creditBasedLoans:
         for month in creditBasedLoans[grade]:
             creditBasedLoans[grade][month] = sum(creditBasedLoans[grade][month])/len(creditBasedLoans[grade][month])
-    
-    print(creditBasedLoans)
-    print(monthVolume)
-    # print("--- %s seconds ---" % (time.time() - start_time))
 
     graphData = {"month-volume": monthVolume, "credit-based-avg": creditBasedLoans}
     return graphData

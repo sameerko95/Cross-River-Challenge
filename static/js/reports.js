@@ -1,11 +1,13 @@
 function getStats(){
-    console.log($('#year').val());
     $("[name='aggregations']").html("");
     $("[name='aggregations']").html("<div class='loader'></div>");
+
     $("#monthly").html("");
     $("#monthly").html("<div class='loader'></div>");
+
     $("#credit-based").html("");
     $("#credit-based").html("<div class='loader'></div>");
+
     $.ajax({
         url : "https://oc5eswj57b.execute-api.us-east-1.amazonaws.com/version-1/get-loan-stats",
         type : "GET",
@@ -14,10 +16,7 @@ function getStats(){
             "year" : $('#year').val()
         },
         success : function(data) {
-            console.log("Success");
-            console.log(data);
             $("[name='aggregations']").html("");
-            console.log($('#applied'));
             $('#applied')[0].innerHTML = "$" + data.loan_amnt.toLocaleString();
             $('#funded')[0].innerHTML = "$" + data.funded_amnt.toLocaleString();
             $('#committed')[0].innerHTML = "$" + data.funded_amnt_inv.toLocaleString();
@@ -36,8 +35,6 @@ function getStats(){
             "year" : $('#year').val()
         },
         success : function(data) {
-            console.log("Success");
-            console.log(data);
             var monthlyVolume = data["monthlyVolume"];
             var creditBased = data["creditBasedAvg"];
             var data = [
@@ -55,11 +52,12 @@ function getStats(){
             };
             $("#monthly").html("");
 
+            var trace_x = ['Dec', 'Nov', 'Oct', 'Sep', 'Aug', 'July', 'June', 'May', 'Apr', 'Mar', 'Feb', 'Jan'];
+
             Plotly.newPlot('monthly', data, layout);
 
             var creditBasedGraphData = [];
             var gradeWiseEntries = Object.entries(creditBased);
-            var trace_x = [1,2,3,4,5,6,7,8,9,10,11,12];
             
             for(index=0; index<gradeWiseEntries.length; index++){
                 var grade = gradeWiseEntries[index][0];
@@ -70,14 +68,13 @@ function getStats(){
                     console.log(key, monthWise[key]);
                     trace_y.push(monthWise[key]);
                 }
-                // console.log(trace_x, trace_y);
+
                 var trace = {
-                    x: ['Dec', 'Nov', 'Oct', 'Sep', 'Aug', 'July', 'June', 'May', 'Apr', 'Mar', 'Feb', 'Jan'],
+                    x: trace_x,
                     y: trace_y,
                     mode: 'lines+markers',
                     name: grade
                 };
-                console.log(trace_y.length);
                 creditBasedGraphData.push(trace);
             }
             6
@@ -85,9 +82,6 @@ function getStats(){
                 title:'Loans Issued By Credit Score',
                 width: 600,
                 height: 450
-                // xaxis: {
-                //     ticktext: ['Dec', 'Nov', 'Oct', 'Sep', 'Aug', 'July', 'June', 'May', 'Apr', 'Mar', 'Feb', 'Jan']
-                // }
             };
             $("#credit-based").html("");
             Plotly.newPlot('credit-based', creditBasedGraphData, layout);
