@@ -95,8 +95,3 @@ function getStats(){
         }
     });
 }
-
-$(document).ready(function(){
-    // Load data for the first year on initial load
-    getStats();
-})
