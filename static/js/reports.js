@@ -8,6 +8,7 @@ function getStats(){
     $("#credit-based").html("");
     $("#credit-based").html("<div class='loader'></div>");
 
+    // Ajax call to lambda function to fetch aggregation results
     $.ajax({
         url : "https://oc5eswj57b.execute-api.us-east-1.amazonaws.com/version-1/get-loan-stats",
         type : "GET",
@@ -27,6 +28,7 @@ function getStats(){
         }
     });
 
+    // Ajax call to fetch data required for visualization
     $.ajax({
         url : "https://oc5eswj57b.execute-api.us-east-1.amazonaws.com/version-1/get-graph-data",
         type : "GET",
@@ -52,20 +54,19 @@ function getStats(){
             };
             $("#monthly").html("");
 
-            var trace_x = ['Dec', 'Nov', 'Oct', 'Sep', 'Aug', 'July', 'June', 'May', 'Apr', 'Mar', 'Feb', 'Jan'];
-
             Plotly.newPlot('monthly', data, layout);
 
-            var creditBasedGraphData = [];
+            // Fetch key value entries in tuple format
             var gradeWiseEntries = Object.entries(creditBased);
-            
+            var trace_x = ['Dec', 'Nov', 'Oct', 'Sep', 'Aug', 'July', 'June', 'May', 'Apr', 'Mar', 'Feb', 'Jan'];
+            var creditBasedGraphData = [];
+
             for(index=0; index<gradeWiseEntries.length; index++){
                 var grade = gradeWiseEntries[index][0];
                 var monthWise = gradeWiseEntries[index][1];
 
                 var trace_y = [];
                 for(key in monthWise){
-                    console.log(key, monthWise[key]);
                     trace_y.push(monthWise[key]);
                 }
 
@@ -77,12 +78,13 @@ function getStats(){
                 };
                 creditBasedGraphData.push(trace);
             }
-            6
+
             var layout = {
                 title:'Loans Issued By Credit Score',
                 width: 600,
                 height: 450
             };
+    
             $("#credit-based").html("");
             Plotly.newPlot('credit-based', creditBasedGraphData, layout);
 
@@ -95,5 +97,6 @@ function getStats(){
 }
 
 $(document).ready(function(){
+    // Load data for the first year on initial load
     getStats();
 })
