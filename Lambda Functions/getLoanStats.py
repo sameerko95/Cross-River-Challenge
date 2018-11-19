@@ -3,9 +3,11 @@ import time
 import json
 
 def lambda_handler(event, context):
+    # Fetch year from get request parameters
     year = event["params"]["querystring"]["year"]
     s3 = boto3.client('s3')
 
+    # Perform S3 Select query to fetch required aggregations of data from csv file
     response = s3.select_object_content(
         Bucket='lending-club-crb',
         Key='loan.csv',
@@ -26,6 +28,8 @@ def lambda_handler(event, context):
             }
         }
     )
+
+    # Build the data in string format
     for event in response['Payload']:
         if 'Records' in event:
             records = json.loads(event['Records']['Payload'].decode('utf-8'))
